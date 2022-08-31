@@ -1,16 +1,117 @@
-# Vue 3 + TypeScript + Vite
+## configure element
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+> element 
 
-## Recommended IDE Setup
+```bash
+    yarn add element-plus
+```
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+> element auto import
 
-## Type Support For `.vue` Imports in TS
+```bash
+    yarn add -D unplugin-vue-components unplugin-auto-import
+```
 
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can enable Volar's Take Over mode by following these steps:
+```typescript
+    // vite.config.ts
+import {resolve} from 'path'
+import {AliasOptions, defineConfig} from 'vite'
+import vue from '@vitejs/plugin-vue'
+import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
+import {ElementPlusResolver} from 'unplugin-vue-components/resolvers'
 
-1. Run `Extensions: Show Built-in Extensions` from VS Code's command palette, look for `TypeScript and JavaScript Language Features`, then right click and select `Disable (Workspace)`. By default, Take Over mode will enable itself if the default TypeScript extension is disabled.
-2. Reload the VS Code window by running `Developer: Reload Window` from the command palette.
 
-You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
+const pathResolve = (dir: string): string => {
+    return resolve(__dirname, dir)
+}
+
+const alias: AliasOptions = {
+    '@': pathResolve('src')
+}
+
+// https://vitejs.dev/config/
+export default defineConfig({
+    resolve: {
+        alias,
+    },
+    plugins: [
+        // ...
+        AutoImport({
+            resolvers: [ElementPlusResolver()],
+        }),
+        Components({
+            resolvers: [ElementPlusResolver()],
+        }),
+    ],
+})
+```
+
+> icons
+
+```bash
+    yarn add -D @iconify/json
+```
+
+> icons auto import
+
+```bash
+    yarn add -D unplugin-icons
+```
+
+```typescript
+    // vite.config.ts
+import {resolve} from 'path'
+import {AliasOptions, defineConfig} from 'vite'
+import vue from '@vitejs/plugin-vue'
+import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
+import {ElementPlusResolver} from 'unplugin-vue-components/resolvers'
+import Icons from 'unplugin-icons/vite'
+import IconsResolver from 'unplugin-icons/resolver'
+
+const pathResolve = (dir: string): string => {
+    return resolve(__dirname, dir)
+}
+
+const alias: AliasOptions = {
+    '@': pathResolve('src')
+}
+
+// https://vitejs.dev/config/
+export default defineConfig({
+    resolve: {
+        alias,
+    },
+    plugins: [
+        vue(),
+        AutoImport({
+            imports: [
+                'vue',
+                'vue-router',
+                'pinia'
+            ],
+            resolvers: [
+                // auto import element functions
+                ElementPlusResolver(),
+            ],
+            dts: false,
+        }),
+        Components({
+            resolvers: [
+                // auto register element components
+                ElementPlusResolver(),
+                // auto register icons components
+                IconsResolver({
+                    prefix: false,
+                }),
+            ],
+            dts: false,
+        }),
+        // auto import @iconify/json
+        Icons({
+            autoInstall: true,
+        }),
+    ]
+})
+```
