@@ -12,7 +12,9 @@ const pathResolve = (dir: string): string => {
 }
 
 const alias: AliasOptions = {
-    '@': pathResolve('src')
+    '@': pathResolve('src'),
+    'components': pathResolve('components'),
+    'store': pathResolve('store'),
 }
 
 // https://vitejs.dev/config/

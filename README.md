@@ -223,3 +223,10 @@ request.interceptors.response.use(
 
 export default request
 ```
+
+## config pinia
+
+```bash
+    yarn add pinia
+```
+
